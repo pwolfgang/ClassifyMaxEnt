@@ -36,11 +36,11 @@ import edu.stanford.nlp.ling.BasicDatum;
 import edu.stanford.nlp.ling.Datum;
 import edu.temple.cla.papolicy.wolfgang.texttools.util.CommonFrontEnd;
 import edu.temple.cla.papolicy.wolfgang.texttools.util.Util;
-import edu.temple.cla.papolicy.wolfgang.texttools.util.Vocabulary;
 import edu.temple.cla.papolicy.wolfgang.texttools.util.WordCounter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 
@@ -102,33 +102,27 @@ public class Main implements Callable<Void> {
      */
     @Override
     public Void call() {
-        List<String> ids = new ArrayList<>();
-        List<String> ref = new ArrayList<>();
-        List<WordCounter> counts = new ArrayList<>();
-        List<Integer> cats = new ArrayList<>();
-        Vocabulary problemVocab = new Vocabulary(); // Not used
+        List<Map<String, Object>> cases = new ArrayList();
         CommonFrontEnd commonFrontEnd = new CommonFrontEnd();
         CommandLine commandLine = new CommandLine(commonFrontEnd);
         commandLine.setUnmatchedArgumentsAllowed(true);
         commandLine.parse(args);
-        commonFrontEnd.loadData(ids, ref, problemVocab, counts);
+        commonFrontEnd.loadData(cases);
         File modelParent = new File(modelDir);
         @SuppressWarnings("unchecked") 
         Classifier<String, String> classifier = 
                 (Classifier<String, String>) Util.readFile(modelParent, "classifier.bin");
-        for (int i = 0; i < counts.size(); i++) {
-            WordCounter count = counts.get(i);
+        cases.forEach(classificationCase -> {
+            WordCounter count = (WordCounter)classificationCase.get("counts");
             Datum<String, String> datum = new BasicDatum<>(count.getWords(), null);
             String cat = classifier.classOf(datum);
-            cats.add(new Integer(cat));
-        }
+            classificationCase.put("newCode", new Integer(cat));
+        });
         String outputTable = outputTableName != null ? outputTableName : commonFrontEnd.getTableName();
         if (outputCodeCol != null) {
             System.err.println("Inserting result into database");
             commonFrontEnd.outputToDatabase(outputTable,
-                    outputCodeCol,
-                    ids,
-                    cats);
+                    outputCodeCol, cases, "newCode");
         }
         System.err.println("SUCESSFUL COMPLETION");
 

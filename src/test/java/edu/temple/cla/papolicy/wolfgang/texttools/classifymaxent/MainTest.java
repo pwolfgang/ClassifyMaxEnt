@@ -31,13 +31,6 @@
  */
 package edu.temple.cla.papolicy.wolfgang.texttools.classifymaxent;
 
-import edu.temple.cla.papolicy.wolfgang.texttools.classifymaxent.Main;
-import edu.temple.cla.papolicy.wolfgang.texttools.util.Vocabulary;
-import edu.temple.cla.papolicy.wolfgang.texttools.util.WordCounter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,10 +40,6 @@ import org.junit.Test;
  */
 public class MainTest {
     
-    List<String> ref = new ArrayList<>();
-    List<String> ids = new ArrayList<>();
-    Vocabulary vocabulary = new Vocabulary();
-    List<WordCounter> counts = new ArrayList<>();
     String[] classifyArgs = {"--datasource", "TestDb.txt",
                 "--table_name", "TestTableUnknown",
                 "--id_column", "ID",
@@ -64,10 +53,6 @@ public class MainTest {
                 "--text_column", "Abstract",
                 "--code_column", "Code",
                 "--remove_stopwords", "false"};
-    Map<String, Integer> docsInTrainingSet = new TreeMap<>();
-    Map<String, WordCounter> trainingSets = new TreeMap<>();
-    Map<String, Double> prior = new TreeMap<>();
-    Map<String, Map<String, Double>> condProb = new TreeMap<>();
 
     public MainTest() {
     }
