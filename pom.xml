@@ -13,7 +13,7 @@
     <repositories>
         <repository>
             <id>StanfordClassifierCopy-mvn-repo</id>
-            <url>https://raw.github.com/pwolfgang/StanfordClassifier-mvn-repo</url>
+            <url>https://raw.github.com/pwolfgang/StanfordClassifier/mvn-repo</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
@@ -83,7 +83,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>StanfordClassifier</artifactId>
-            <version>3.9.1</version>
+            <version>3.9.1-COPY</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
