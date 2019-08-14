@@ -116,7 +116,15 @@ public class Main implements Callable<Void> {
             WordCounter count = (WordCounter)classificationCase.get("counts");
             Datum<String, String> datum = new BasicDatum<>(count.getWords(), null);
             String cat = classifier.classOf(datum);
-            classificationCase.put("newCode", new Integer(cat));
+            int catInt;
+            if (cat.equalsIgnoreCase("true")) {
+                catInt = 1;
+            } else if (cat.equalsIgnoreCase("false")) {
+                catInt = 0;
+            } else {
+                catInt = Integer.parseInt(cat);
+            }
+            classificationCase.put("newCode", catInt);
         });
         String outputTable = outputTableName != null ? outputTableName : commonFrontEnd.getTableName();
         if (outputCodeCol != null) {
